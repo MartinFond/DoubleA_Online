@@ -19,6 +19,10 @@ curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"example\", 
 Ask for achievements :
 curl -X GET http://localhost:5204/api/achievements -H "Authorization: Bearer your_token"
 
+To add achievement for a user in pgsql : 
+INSERT INTO public.UserAchievements (user_id, achievement_id)
+VALUES ('example_user_id', 'example_achievement_id');
+
 database name : my_api_rest
 user name: martin
 password : password
