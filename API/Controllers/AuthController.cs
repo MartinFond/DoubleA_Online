@@ -3,6 +3,7 @@ using API.Models;
 using API.Services;
 using System.Threading.Tasks;
 using System.Text;
+using NuGet.Protocol;
 
 
 namespace API.Controllers
@@ -31,8 +32,8 @@ namespace API.Controllers
             // Here you can generate a token or set up the user session as needed
             // For simplicity, let's just return the authenticated user
             
-            string token = _jwtService.GenerateToken(user.Username, "user");
-            return Ok(token);
+            string token = _jwtService.GenerateToken(user.Username, "user", user.Id.ToString());
+            return Ok(new { Token = token });
             //return Ok(user);
         }
 

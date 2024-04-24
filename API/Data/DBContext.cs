@@ -11,5 +11,16 @@ namespace API.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<UserAchievements> UserAchievements { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserAchievements>()
+                .HasKey(ua => new { ua.UserId, ua.AchievementId });
+        }
     }
 }

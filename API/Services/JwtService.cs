@@ -17,10 +17,11 @@ public class JwtService
         _issuer = issuer;
     }
 
-    public string GenerateToken(string username, string role)
+    public string GenerateToken(string username, string role, string userId)
     {
         var claims = new[]
         {
+            new Claim(ClaimTypes.NameIdentifier, userId),
             new Claim(ClaimTypes.Name, username),
             new Claim(ClaimTypes.Role, role)
         };
