@@ -4,6 +4,9 @@ using API.Models;
 using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System.Text;
+
 
 namespace API.Services
 {
@@ -16,18 +19,24 @@ namespace API.Services
             _context = context;
         }
 
-        public async Task<User> Authenticate(string username, string password)
+        public async Task<User?> Authenticate(string username, string password)
         {
             var user = await _context.Users
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
+            {
+                Console.WriteLine("User Not Found");
                 return null; // User not found
+            }
 
             // Verify password
-            if (!VerifyPasswordHash(password, user.Password, user.Salt))
-                return null; // Invalid password
+            if (!VerifyPasswordHash(password, Convert.FromBase64String(user.Password), Convert.FromBase64String(user.Salt)))
+                {
+                    Console.WriteLine("WrongPassword");
+                    return null; // Invalid password
+                }
 
             // Authentication successful
             return user;
@@ -38,8 +47,8 @@ namespace API.Services
             if (await _context.Users.AnyAsync(u => u.Username == user.Username))
                 return false; // Username already exists
 
-            user.Password = passwordHash;
-            user.Salt = salt;
+            user.Password = Convert.ToBase64String(passwordHash);
+            user.Salt = Convert.ToBase64String(salt);
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -60,14 +69,16 @@ namespace API.Services
         {
             using (var sha256 = SHA256.Create())
             {
-                byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
+                byte[] passwordBytes = System.Text.Encoding.ASCII.GetBytes(password);
                 byte[] saltedPasswordBytes = new byte[passwordBytes.Length + salt.Length];
 
                 // Concatenate password and salt bytes
                 Buffer.BlockCopy(passwordBytes, 0, saltedPasswordBytes, 0, passwordBytes.Length);
                 Buffer.BlockCopy(salt, 0, saltedPasswordBytes, passwordBytes.Length, salt.Length);
+                byte[] hash = sha256.ComputeHash(saltedPasswordBytes);
 
-                return sha256.ComputeHash(saltedPasswordBytes);
+
+                return hash;
             }
         }
 
@@ -75,20 +86,13 @@ namespace API.Services
         {
             using (var sha256 = SHA256.Create())
             {
-                byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-                byte[] saltedPasswordBytes = new byte[passwordBytes.Length + storedSalt.Length];
-
-                // Concatenate password and salt bytes
-                Buffer.BlockCopy(passwordBytes, 0, saltedPasswordBytes, 0, passwordBytes.Length);
-                Buffer.BlockCopy(storedSalt, 0, saltedPasswordBytes, passwordBytes.Length, storedSalt.Length);
-
-                byte[] computedHash = sha256.ComputeHash(saltedPasswordBytes);
-
-                // Compare computed hash with stored hash
+                byte[] computedHash = CreatePasswordHash(password, storedSalt);
                 for (int i = 0; i < storedHash.Length; i++)
                 {
                     if (storedHash[i] != computedHash[i])
+                    {
                         return false;
+                    }
                 }
                 return true;
             }

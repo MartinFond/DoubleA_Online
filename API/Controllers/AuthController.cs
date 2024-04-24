@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using API.Models;
 using API.Services;
 using System.Threading.Tasks;
+using System.Text;
+
 
 namespace API.Controllers
 {
@@ -10,10 +12,12 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly JwtService _jwtService;
 
-        public AuthController(IAuthenticationService authenticationService)
+        public AuthController(IAuthenticationService authenticationService, JwtService jwtService)
         {
             _authenticationService = authenticationService;
+            _jwtService = jwtService;
         }
 
         [HttpPost("login")]
@@ -26,20 +30,28 @@ namespace API.Controllers
 
             // Here you can generate a token or set up the user session as needed
             // For simplicity, let's just return the authenticated user
-            return Ok(user);
+            
+            string token = _jwtService.GenerateToken(user.Username, "user");
+            return Ok(token);
+            //return Ok(user);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
+
+
+            byte[] salt = _authenticationService.GenerateSalt();
+            byte[] passwordHash = _authenticationService.CreatePasswordHash(model.Password, salt);
+
             var user = new User
             {
                 Username = model.Username,
-                RoleId = model.RoleId // Assuming you'll validate and set this properly
+                RoleId = model.RoleId, // Assuming you'll validate and set this properly
+                Email = "user@example.com",
+                Salt = Convert.ToBase64String(salt),
+                Password = Convert.ToBase64String(passwordHash),
             };
-
-            byte[] salt = GenerateSalt();
-            byte[] passwordHash = CreatePasswordHash(model.Password, salt);
 
             var success = await _authenticationService.Register(user, passwordHash, salt);
 
@@ -49,41 +61,18 @@ namespace API.Controllers
             return Ok("Registration successful");
         }
 
-        private byte[] GenerateSalt()
-        {
-            byte[] salt = new byte[16];
-            using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
-            return salt;
-        }
 
-        private byte[] CreatePasswordHash(string password, byte[] salt)
-        {
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
-            {
-                byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-                byte[] saltedPasswordBytes = new byte[passwordBytes.Length + salt.Length];
-
-                // Concatenate password and salt bytes
-                System.Buffer.BlockCopy(passwordBytes, 0, saltedPasswordBytes, 0, passwordBytes.Length);
-                System.Buffer.BlockCopy(salt, 0, saltedPasswordBytes, passwordBytes.Length, salt.Length);
-
-                return sha256.ComputeHash(saltedPasswordBytes);
-            }
-        }
 
         public class LoginRequest
         {
-            public string Username { get; set; }
-            public string Password { get; set; }
+            public required string Username { get; set; }
+            public required string Password { get; set; }
         }
 
         public class RegisterRequest
         {
-            public string Username { get; set; }
-            public string Password { get; set; }
+            public required string Username { get; set; }
+            public required string Password { get; set; }
             public int RoleId { get; set; }
         }
     }
