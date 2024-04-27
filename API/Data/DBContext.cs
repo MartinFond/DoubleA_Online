@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using API.Models;
+using Npgsql;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Data
 {
@@ -17,10 +19,11 @@ namespace API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
+            modelBuilder.HasPostgresEnum<RoleType>();
             modelBuilder.Entity<UserAchievements>()
                 .HasKey(ua => new { ua.UserId, ua.AchievementId });
+
+                base.OnModelCreating(modelBuilder); 
         }
     }
 }

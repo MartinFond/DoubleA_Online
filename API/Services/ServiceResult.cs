@@ -1,9 +1,9 @@
 public class ServiceResult
 {
     public bool IsSuccess { get; private set; }
-    public string ErrorMessage { get; private set; }
+    public string? ErrorMessage { get; private set; }
 
-    private ServiceResult(bool isSuccess, string errorMessage)
+    private ServiceResult(bool isSuccess, string? errorMessage)
     {
         IsSuccess = isSuccess;
         ErrorMessage = errorMessage;

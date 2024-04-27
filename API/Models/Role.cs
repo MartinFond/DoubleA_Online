@@ -6,8 +6,6 @@ namespace API.Models
     public class Role
     {
         [Column("id")]
-        public int Id { get; set; }
-        [Column("name")]
-        public required string Name { get; set; }
+        public RoleType Id { get; set; }
     }
 }

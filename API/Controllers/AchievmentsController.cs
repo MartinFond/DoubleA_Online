@@ -47,9 +47,10 @@ namespace API.Controllers
         }
 
         [HttpPost("grant")]
-        [Authorize(Roles = "2")] // Ensure only DGS users can access this endpoint
+        [Authorize(Roles = "DGS")] // Ensure only DGS users can access this endpoint
         public async Task<IActionResult> GrantAchievement([FromBody] GrantAchievementRequest request)
         {
+            Console.WriteLine("Granting !");
             // Validate request parameters
             if (request.UserId == Guid.Empty || request.AchievementId == Guid.Empty)
             {

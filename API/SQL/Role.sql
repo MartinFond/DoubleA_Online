@@ -1,23 +1,14 @@
--- Table: public.UserAchievements
+-- Table: public.role
 
--- DROP TABLE IF EXISTS public."UserAchievements";
+-- DROP TABLE IF EXISTS public.role;
 
-CREATE TABLE IF NOT EXISTS public."UserAchievements"
+CREATE TABLE IF NOT EXISTS public.role
 (
-    user_id uuid NOT NULL,
-    achievement_id uuid NOT NULL,
-    CONSTRAINT "UserAchievements_pk" PRIMARY KEY (user_id, achievement_id),
-    CONSTRAINT "UserAchievements_achievement_id_fk" FOREIGN KEY (achievement_id)
-        REFERENCES public."Achievements" (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE,
-    CONSTRAINT "UserAchievements_user_id_fk" FOREIGN KEY (user_id)
-        REFERENCES public."User" (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE CASCADE
+    id role_type,
+    CONSTRAINT unique_role_id UNIQUE (id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."UserAchievements"
+ALTER TABLE IF EXISTS public.role
     OWNER to martin;

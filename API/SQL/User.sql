@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS public."User"
     email character varying(255) COLLATE pg_catalog."default" NOT NULL,
     password character varying(255) COLLATE pg_catalog."default" NOT NULL,
     salt character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    role_id integer NOT NULL,
+    role role_type,
     CONSTRAINT "User_pkey" PRIMARY KEY (id),
     CONSTRAINT "User_email_key" UNIQUE (email),
     CONSTRAINT "User_username_key" UNIQUE (username),
-    CONSTRAINT "User_role_id_fkey" FOREIGN KEY (role_id)
+    CONSTRAINT fk_user_role FOREIGN KEY (role)
         REFERENCES public.role (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION

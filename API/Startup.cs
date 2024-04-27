@@ -9,6 +9,8 @@ using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Npgsql;
+using API.Models;
 
 namespace API
 {
@@ -23,14 +25,24 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(Configuration.GetConnectionString("DefaultConnection"));
+            dataSourceBuilder.MapEnum<RoleType>();
+            var dataSource = dataSourceBuilder.Build();
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(dataSource));
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
                     // Add JWT authentication
             var secretKey = Configuration["Jwt:SecretKey"];
             var issuer = Configuration["Jwt:Issuer"];
+
+            if (secretKey == null || issuer == null)
+            {
+                Console.WriteLine("Bad configuration, check Issuer and SecretKey (can't be null)");
+                System.Environment.Exit(0);
+                return;
+            }
             services.AddSingleton(new JwtService(secretKey, issuer));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

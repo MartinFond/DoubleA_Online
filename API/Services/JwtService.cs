@@ -3,6 +3,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,8 +18,9 @@ public class JwtService
         _issuer = issuer;
     }
 
-    public string GenerateToken(string username, int role, string userId)
+    public string GenerateToken(string username, RoleType role, string userId)
     {
+        Console.WriteLine("Generating token with role :" + role.ToString());
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, userId),
