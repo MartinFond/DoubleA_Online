@@ -16,6 +16,22 @@ namespace API.Models
         DGS
     }
 
+    public enum Rank
+    {
+        [Display(Name = "Unranked")]
+        unranked,
+        [Display(Name = "Bronze")]
+        bronze,
+        [Display(Name = "Argent")]
+        argent,
+        [Display(Name = "Or")]
+        or,
+        [Display(Name = "Platine")]
+        platine,
+        [Display(Name = "Diamant")]
+        diamant
+    }
+
     [Table("User", Schema = "public")]
     public class User
     {

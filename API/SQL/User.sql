@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public."User"
     password character varying(255) COLLATE pg_catalog."default" NOT NULL,
     salt character varying(255) COLLATE pg_catalog."default" NOT NULL,
     role role_type,
+    rank rank NOT NULL DEFAULT 'unranked'::rank,
     CONSTRAINT "User_pkey" PRIMARY KEY (id),
     CONSTRAINT "User_email_key" UNIQUE (email),
     CONSTRAINT "User_username_key" UNIQUE (username),
