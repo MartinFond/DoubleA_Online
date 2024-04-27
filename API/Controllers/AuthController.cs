@@ -32,7 +32,7 @@ namespace API.Controllers
             // Here you can generate a token or set up the user session as needed
             // For simplicity, let's just return the authenticated user
             
-            string token = _jwtService.GenerateToken(user.Username, "user", user.Id.ToString());
+            string token = _jwtService.GenerateToken(user.Username, user.RoleId, user.Id.ToString());
             return Ok(new { Token = token });
             //return Ok(user);
         }
@@ -49,7 +49,7 @@ namespace API.Controllers
             {
                 Username = model.Username,
                 RoleId = model.RoleId, // Assuming you'll validate and set this properly
-                Email = "user@example.com",
+                Email = model.Email,
                 Salt = Convert.ToBase64String(salt),
                 Password = Convert.ToBase64String(passwordHash),
             };
@@ -74,6 +74,7 @@ namespace API.Controllers
         {
             public required string Username { get; set; }
             public required string Password { get; set; }
+            public required string Email { get; set; }
             public int RoleId { get; set; }
         }
     }

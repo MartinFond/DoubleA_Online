@@ -49,6 +49,8 @@ namespace API
                 });
 
             services.AddControllers();
+            services.AddScoped<AchievementService>();
+
 
         }
 

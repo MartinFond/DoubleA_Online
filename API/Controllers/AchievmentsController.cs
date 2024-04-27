@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using API.Data;
+using API.Services;
 
 namespace API.Controllers
 {
@@ -13,10 +14,12 @@ namespace API.Controllers
     public class AchievementsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly AchievementService _achievementService;
 
-        public AchievementsController(ApplicationDbContext context)
+        public AchievementsController(ApplicationDbContext context, AchievementService achievementService)
         {
             _context = context;
+            _achievementService = achievementService;
         }
 
         [HttpGet]
@@ -41,6 +44,29 @@ namespace API.Controllers
                 .ToList();
 
             return Ok(userAchievements);
+        }
+
+        [HttpPost("grant")]
+        [Authorize(Roles = "2")] // Ensure only DGS users can access this endpoint
+        public async Task<IActionResult> GrantAchievement([FromBody] GrantAchievementRequest request)
+        {
+            // Validate request parameters
+            if (request.UserId == Guid.Empty || request.AchievementId == Guid.Empty)
+            {
+                return BadRequest("Invalid request parameters");
+            }
+
+            // Call the service to grant the achievement
+            var result = await _achievementService.GrantAchievement(request.UserId, request.AchievementId);
+
+            if (result.IsSuccess)
+            {
+                return Ok("Achievement granted successfully");
+            }
+            else
+            {
+                return BadRequest(result.ErrorMessage);
+            }
         }
     }
 }
