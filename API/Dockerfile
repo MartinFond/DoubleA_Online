@@ -27,5 +27,5 @@ COPY --from=build /app/out .
 EXPOSE 8080
 
 # Command to run the application
-CMD ["dotnet", "run"]
+CMD ["dotnet", "API.dll"]
 
