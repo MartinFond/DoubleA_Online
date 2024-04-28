@@ -6,6 +6,7 @@ Installation des packages :
 dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package StackExchange.Redis
 
 to run the app :
 dotnet run 

@@ -63,6 +63,8 @@ namespace API
             services.AddControllers();
             services.AddScoped<AchievementService>();
 
+            services.AddScoped<RedisService>();
+
 
         }
 
