@@ -14,6 +14,10 @@ COPY . .
 # Build the application
 RUN dotnet publish -c Release -o out
 
+#Build PostgreSQL
+FROM postgres:latest AS build-postgres
+COPY SQL_init/init.sql /docker-entrypoint-initdb.d/
+
 # Use the official .NET Core runtime image as the base image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.1 AS runtime
 
@@ -25,7 +29,11 @@ COPY --from=build /app/out .
 
 # Expose port 8080 (assuming your API listens on port 8080)
 EXPOSE 8080
+EXPOSE 5432
 
 # Command to run the application
 CMD ["dotnet", "API.dll"]
+
+# Copy initialization script into the PostgreSQL image
+COPY --from=build-postgres /docker-entrypoint-initdb.d/init.sql /docker-entrypoint-initdb.d/
 
