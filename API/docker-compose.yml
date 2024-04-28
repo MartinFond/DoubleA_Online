@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: my_api_rest
+      POSTGRES_USER: martin
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres_network
+      
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    networks:
+      - redis_network
+
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: my_api_rest
+      POSTGRES_USER: martin
+      POSTGRES_PASSWORD: password
+      REDIS_HOST: redis
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - postgres_network
+      - redis_network
+  
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  postgres_network:
+  redis_network:
