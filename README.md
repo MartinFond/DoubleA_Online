@@ -33,7 +33,11 @@ To add achievement for a user in pgsql :
 INSERT INTO public.UserAchievements (user_id, achievement_id)
 VALUES ('example_user_id', 'example_achievement_id');
 
+To install docker compose:
+https://docs.docker.com/desktop/install/windows-install/
 
+To run the docker compose:
+docker-compose up
 
 database name : my_api_rest
 user name: martin
