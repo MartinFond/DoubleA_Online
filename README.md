@@ -36,6 +36,9 @@ VALUES ('example_user_id', 'example_achievement_id');
 To install docker compose:
 https://docs.docker.com/desktop/install/windows-install/
 
+Tu build docker image:
+docker build -t docker_image .
+
 To run the docker compose:
 docker-compose up
 
