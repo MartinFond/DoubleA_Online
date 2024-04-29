@@ -1,21 +1,25 @@
-public class ServiceResult
+namespace API.Services
 {
-    public bool IsSuccess { get; private set; }
-    public string? ErrorMessage { get; private set; }
 
-    private ServiceResult(bool isSuccess, string? errorMessage)
+    public class ServiceResult
     {
-        IsSuccess = isSuccess;
-        ErrorMessage = errorMessage;
-    }
+        public bool IsSuccess { get; private set; }
+        public string? ErrorMessage { get; private set; }
 
-    public static ServiceResult CreateSuccess()
-    {
-        return new ServiceResult(true, null);
-    }
+        private ServiceResult(bool isSuccess, string? errorMessage)
+        {
+            IsSuccess = isSuccess;
+            ErrorMessage = errorMessage;
+        }
 
-    public static ServiceResult CreateError(string errorMessage)
-    {
-        return new ServiceResult(false, errorMessage);
+        public static ServiceResult CreateSuccess()
+        {
+            return new ServiceResult(true, null);
+        }
+
+        public static ServiceResult CreateError(string errorMessage)
+        {
+            return new ServiceResult(false, errorMessage);
+        }
     }
 }

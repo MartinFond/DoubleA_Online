@@ -7,38 +7,42 @@ using API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-public class JwtService
+namespace API.Services
 {
-    private readonly string _secretKey;
-    private readonly string _issuer;
 
-    public JwtService(string secretKey, string issuer)
+    public class JwtService
     {
-        _secretKey = secretKey;
-        _issuer = issuer;
-    }
+        private readonly string _secretKey;
+        private readonly string _issuer;
 
-    public string GenerateToken(string username, RoleType role, string userId)
-    {
-        Console.WriteLine("Generating token with role :" + role.ToString());
-        var claims = new[]
+        public JwtService(string secretKey, string issuer)
         {
-            new Claim(ClaimTypes.NameIdentifier, userId),
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, role.ToString())
-        };
+            _secretKey = secretKey;
+            _issuer = issuer;
+        }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        public string GenerateToken(string username, RoleType role, string userId)
+        {
+            Console.WriteLine("Generating token with role :" + role.ToString());
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role.ToString())
+            };
 
-        var token = new JwtSecurityToken(
-            issuer: _issuer,
-            audience: _issuer,
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30), // Token expiration time
-            signingCredentials: creds);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = new JwtSecurityToken(
+                issuer: _issuer,
+                audience: _issuer,
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30), // Token expiration time
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }
     
