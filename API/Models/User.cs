@@ -16,7 +16,7 @@ namespace API.Models
         DGS
     }
 
-    public enum Rank
+    public enum RankType
     {
         [Display(Name = "Unranked")]
         unranked,
@@ -47,5 +47,7 @@ namespace API.Models
         public RoleType Role { get; set; }
         [Column("email")]
         public required string Email {get; set;}
+        [Column("rank")]
+        public required RankType Rank  {get; set; }
     }
 }

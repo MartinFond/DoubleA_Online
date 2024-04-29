@@ -16,12 +16,12 @@ ALTER TYPE public.role_type
 
 -- Type: rank
 
--- DROP TYPE IF EXISTS public.rank;
+-- DROP TYPE IF EXISTS public.rank_type;
 
-CREATE TYPE public.rank AS ENUM
+CREATE TYPE public.rank_type AS ENUM
     ('unranked', 'bronze', 'argent', 'or', 'platine', 'diamant');
 
-ALTER TYPE public.rank
+ALTER TYPE public.rank_type
     OWNER TO martin;
 
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public."User"
     password character varying(255) COLLATE pg_catalog."default" NOT NULL,
     salt character varying(255) COLLATE pg_catalog."default" NOT NULL,
     role role_type,
-    rank rank NOT NULL DEFAULT 'unranked'::rank,
+    rank rank_type NOT NULL DEFAULT 'unranked'::rank_type,
     CONSTRAINT "User_pkey" PRIMARY KEY (id),
     CONSTRAINT "User_email_key" UNIQUE (email),
     CONSTRAINT "User_username_key" UNIQUE (username),

@@ -8,9 +8,10 @@ using API.Services;
 
 namespace API.Controllers
 {
-    [Authorize] // Requires authentication
-    [Route("api/[controller]")]
+    //[Authorize] // Requires authentication
     [ApiController]
+    [Route("[controller]")]
+
     public class AchievementsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

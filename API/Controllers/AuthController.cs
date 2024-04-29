@@ -33,7 +33,19 @@ namespace API.Controllers
             // Here you can generate a token or set up the user session as needed
             // For simplicity, let's just return the authenticated user
             Console.WriteLine("Connection ok, generating token");
-            string token = _jwtService.GenerateToken(user.Username, user.Role, user.Id.ToString());
+            string token;
+            if (user.Role == RoleType.DGS)
+            {
+                if (model.IpAddress == null)
+                {
+                    return BadRequest("You must provide a non null IP");
+                }
+                token = _jwtService.GenerateToken(user.Username, user.Role, user.Id.ToString(), model.IpAddress);
+            }
+            else
+            {
+                token = _jwtService.GenerateToken(user.Username, user.Role, user.Id.ToString());
+            }
             return Ok(new { Token = token });
             //return Ok(user);
         }
@@ -47,6 +59,7 @@ namespace API.Controllers
             byte[] passwordHash = _authenticationService.CreatePasswordHash(model.Password, salt);
 
             Enum.TryParse<RoleType>(model.Role, true, out RoleType role);
+            Enum.TryParse<RankType>(model.Rank, true, out RankType rank);
             var user = new User
             {
                 Username = model.Username,
@@ -54,6 +67,7 @@ namespace API.Controllers
                 Email = model.Email,
                 Salt = Convert.ToBase64String(salt),
                 Password = Convert.ToBase64String(passwordHash),
+                Rank = rank
             };
 
             var success = await _authenticationService.Register(user, passwordHash, salt);
@@ -70,6 +84,7 @@ namespace API.Controllers
         {
             public required string Username { get; set; }
             public required string Password { get; set; }
+            public string? IpAddress { get; set; }
         }
 
         public class RegisterRequest
@@ -78,6 +93,7 @@ namespace API.Controllers
             public required string Password { get; set; }
             public required string Email { get; set; }
             public required string Role { get; set; }
+            public required string Rank { get; set; }
         }
     }
 }

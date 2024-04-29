@@ -20,6 +20,7 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresEnum<RoleType>();
+            modelBuilder.HasPostgresEnum<RankType>();
             modelBuilder.Entity<UserAchievements>()
                 .HasKey(ua => new { ua.UserId, ua.AchievementId });
 

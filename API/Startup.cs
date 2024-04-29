@@ -27,6 +27,7 @@ namespace API
         {
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(Configuration.GetConnectionString("DefaultConnection"));
             dataSourceBuilder.MapEnum<RoleType>();
+            dataSourceBuilder.MapEnum<RankType>();
             var dataSource = dataSourceBuilder.Build();
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -60,8 +61,10 @@ namespace API
                     };
                 });
 
+            services.AddSignalR();
             services.AddControllers();
             services.AddScoped<AchievementService>();
+            services.AddSingleton<MatchmakingService>();
 
             services.AddScoped<RedisService>();
 
@@ -81,6 +84,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MatchMakingHub>("/matchmakinghub");
             });
         }
     }

@@ -21,14 +21,15 @@ namespace API.Services
             _issuer = issuer;
         }
 
-        public string GenerateToken(string username, RoleType role, string userId)
+        public string GenerateToken(string username, RoleType role, string userId, string ipAddress = "not_needed")
         {
             Console.WriteLine("Generating token with role :" + role.ToString());
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userId),
                 new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, role.ToString())
+                new Claim(ClaimTypes.Role, role.ToString()),
+                new Claim("ip_address", ipAddress)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
