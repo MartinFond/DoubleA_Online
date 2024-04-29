@@ -24,7 +24,7 @@ namespace API.Services
         private readonly Dictionary<RankType, Queue<string>> _buckets; // Dictionary to store bucket IDs and player connection IDs
         private readonly List<FullBucket> _fullBuckets;
         private readonly Queue<string> _dgs;
-        private readonly int _bucketSize = 1; // Size of each bucket
+        private readonly int _bucketSize = 2; // Size of each bucket
         private readonly IHubContext<MatchMakingHub> _hubContext;
 
         public MatchmakingService(IHubContext<MatchMakingHub> hubContext)
