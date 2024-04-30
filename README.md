@@ -13,25 +13,25 @@ dotnet run
 
 Register : 
 
-     Players:
+Players:
 
      curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"example\", \"password\":\"password123\", \"email\":\"example@doubleA.com\", \"rank\":\"argent\", \"role\":\"Player\"}" http://localhost:8080/auth/register
 
      curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"example2\", \"password\":\"password123\", \"email\":\"example2@doubleA.com\", \"rank\":\"argent\", \"role\":\"Player\"}" http://localhost:8080/auth/register
 
-     DGS:
+DGS:
 
      curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"exampledgs\", \"password\":\"password123\", \"email\":\"exampledgs@doubleA.com\", \"rank\":\"unranked\", \"role\":\"DGS\"}" http://localhost:8080/auth/register
 
 
 Login :
 
-     Players:
+Players:
      curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"example\", \"password\":\"password123\"}" http://localhost:8080/auth/login    -> Return a token
 
      curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"example2\", \"password\":\"password123\"}" http://localhost:8080/auth/login
 
-     DGS:
+DGS:
 
      curl -X POST -H "Content-Type: application/json" -d "{\"username\":\"exampledgs\", \"password\":\"password123\", \"ipaddress\":\"serverip\"}" http://localhost:8080/auth/login 
 
