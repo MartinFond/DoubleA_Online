@@ -1,15 +1,50 @@
 # DoubleA_Online
 Projet programmation réseau pour le JV
 
-Installation des packages :
 
-dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
-dotnet add package Microsoft.EntityFrameworkCore.Design
-dotnet add package Microsoft.EntityFrameworkCore
-dotnet add package StackExchange.Redis
 
-to run the app :
-dotnet run 
+
+Command to start the API:
+docker-compose up --build
+
+Command to initialize the API database:
+Bash:
+./init.sh
+PowerShell
+.\init.ps1
+
+The server and clients needs to run on the same machine
+
+To connect players
+player 1: 
+     username: example
+     password: password123
+palyer 2:
+     username: example2
+     password: password123
+
+
+
+Connected players can try to find a match.
+The matchmaking waits for 2 players to be in the same bucket and for a server to host the game.
+When you start the server, it is added to the matchmaking system of the API.
+Whenever 2 player and a server are ready to start, the game launch. (server can be started before or after the clients are added to matchmaking).
+
+The achievement button prints the achievements list of the player, by default there are no achievements.
+A DGS can add an achievement to a player (see below).
+
+
+
+
+
+
+
+
+
+
+
+
+## TEST COMMAND
 
 Register : 
 

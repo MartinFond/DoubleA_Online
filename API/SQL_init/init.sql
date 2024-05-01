@@ -48,10 +48,10 @@ ALTER TABLE IF EXISTS public.role
 CREATE TABLE IF NOT EXISTS public."User"
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    username character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    salt character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    username TEXT COLLATE pg_catalog."default" NOT NULL,
+    email TEXT COLLATE pg_catalog."default" NOT NULL,
+    password TEXT COLLATE pg_catalog."default" NOT NULL,
+    salt TEXT COLLATE pg_catalog."default" NOT NULL,
     role role_type,
     rank rank_type NOT NULL DEFAULT 'unranked'::rank_type,
     CONSTRAINT "User_pkey" PRIMARY KEY (id),
@@ -76,9 +76,9 @@ ALTER TABLE IF EXISTS public."User"
 CREATE TABLE IF NOT EXISTS public."Achievements"
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    name TEXT COLLATE pg_catalog."default" NOT NULL,
     description text COLLATE pg_catalog."default",
-    image_url character varying(255) COLLATE pg_catalog."default",
+    image_url TEXT COLLATE pg_catalog."default",
     CONSTRAINT "Achievements_pkey" PRIMARY KEY (id)
 )
 
