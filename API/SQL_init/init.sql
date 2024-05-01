@@ -122,3 +122,5 @@ INSERT INTO public.role (id) VALUES ('dgs');
 
 INSERT INTO public."Achievements" ( name, description, image_url)
 VALUES ('exempleAchievement', 'achievement_description', 'imageEx_url');
+
+

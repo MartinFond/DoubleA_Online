@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 
 namespace API.Controllers
@@ -137,7 +138,7 @@ namespace API.Controllers
             List<string>? users = _matchmakingService.PullUpdateServer(dgsAddress);
             if (users != null)
             {
-                return Ok("MatchReady");
+                return Ok(users);
             }
             return Ok("MatchNotReady");
         }

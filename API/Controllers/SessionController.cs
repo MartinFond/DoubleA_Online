@@ -22,6 +22,7 @@ namespace API.Controllers{
         [Authorize(Roles = "DGS")]
         public async Task<IActionResult> RegisterSession([FromBody] Session session)
         {
+            Console.WriteLine("Registering Session");
             if (string.IsNullOrEmpty(session.sessionId) || session == null)
             {
                 return BadRequest("Invalid session data");
@@ -30,6 +31,7 @@ namespace API.Controllers{
             var success = await _redisService.RegisterSessionAsync(session.sessionId, session);
             if (success)
             {
+                Console.WriteLine("SessionRegistered");
                 return Ok("Session registered successfully");
             }
             else
